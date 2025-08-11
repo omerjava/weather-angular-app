@@ -10,18 +10,19 @@ pipeline {
         }
 
         stage('Build Angular App & Docker Image') {
-            agent {
-                docker {
-                  image 'node:24.0.2'
-                  args '-v /var/run/docker.sock:/var/run/docker.sock'
-                }
+          agent {
+            docker {
+              image 'node:24.0.2'
+              args '-v /var/run/docker.sock:/var/run/docker.sock'
             }
-            steps {
-                sh 'npm install -g @angular/cli'
-                sh 'npm install'
-                sh 'ng build --configuration production'
-                sh 'docker build -t omerjava/weather-angular-app .'
-            }
+          }
+          steps {
+            sh 'apt-get update && apt-get install -y docker.io'
+            sh 'npm install -g @angular/cli'
+            sh 'npm install'
+            sh 'ng build --configuration production'
+            sh 'docker build -t omerjava/weather-angular-app .'
+          }
         }
 
         stage('Push to Docker Hub') {
