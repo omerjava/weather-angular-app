@@ -5,30 +5,32 @@ pipeline {
         stage('Checkout') {
             steps {
                 git branch: 'master',
-                    url: 'https://github.com/omerjava/weather-angular-app.git',
-                    credentialsId: 'github-creds'
+                    url: 'https://github.com/omerjava/weather-angular-app.git'
+                    // remove credentialsId if repo is public or fix credentials
             }
         }
 
-        stage('Build Angular App & Docker Image') {
+        stage('Build Angular App') {
             agent {
                 docker {
                     image 'node:24.0.2'
-                    args '-u root'  // Run as root to avoid npm permission issues
+                    args '-u root'
                 }
             }
             steps {
                 sh 'npm install -g @angular/cli'
                 sh 'npm install'
                 sh 'ng build --configuration production'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
                 sh 'docker build -t omerjava/weather-angular-app .'
             }
         }
 
         stage('Push to Docker Hub') {
-            when {
-                expression { currentBuild.currentResult == 'SUCCESS' }
-            }
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                     sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
@@ -38,9 +40,6 @@ pipeline {
         }
 
         stage('Deploy to Hetzner') {
-            when {
-                expression { currentBuild.currentResult == 'SUCCESS' }
-            }
             steps {
                 sshagent(['hetzner-ssh-key']) {
                     sh 'ssh -o StrictHostKeyChecking=no root@91.99.230.244 "docker pull omerjava/weather-angular-app && docker-compose -f /path/to/docker-compose.yml up -d"'
