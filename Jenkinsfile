@@ -1,5 +1,6 @@
 pipeline {
     agent any
+
     stages {
         stage('Checkout') {
             steps {
@@ -10,19 +11,26 @@ pipeline {
         }
 
         stage('Build Angular App & Docker Image') {
-          agent {
-            docker {
-              image 'node:24.0.2'
-              args '-v /var/run/docker.sock:/var/run/docker.sock'
+            agent {
+                docker {
+                    image 'node:24.0.2'
+                    // To connect Docker client inside container to Docker Desktop on Windows:
+                    args '-e DOCKER_HOST=tcp://host.docker.internal:2375'
+                }
             }
-          }
-          steps {
-            sh 'apt-get update && apt-get install -y docker.io'
-            sh 'npm install -g @angular/cli'
-            sh 'npm install'
-            sh 'ng build --configuration production'
-            sh 'docker build -t omerjava/weather-angular-app .'
-          }
+            steps {
+                // Install Angular CLI
+                sh 'npm install -g @angular/cli'
+
+                // Install dependencies
+                sh 'npm install'
+
+                // Build Angular app
+                sh 'ng build --configuration production'
+
+                // Build Docker image (Docker CLI must be installed in node:24.0.2 container or you provide it)
+                sh 'docker build -t omerjava/weather-angular-app .'
+            }
         }
 
         stage('Push to Docker Hub') {
@@ -43,4 +51,3 @@ pipeline {
         }
     }
 }
-
