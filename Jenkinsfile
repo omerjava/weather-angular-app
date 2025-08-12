@@ -47,7 +47,7 @@ pipeline {
                             docker pull omerjava/weather-angular-app:latest &&
                             docker stop weather-app || true &&
                             docker rm weather-app || true &&
-                            docker run -d --name weather-app -p 80:80 omerjava/weather-angular-app:latest
+                            docker run -d --name weather-app -p 8888:80 omerjava/weather-angular-app:latest
                         "
                     '''                }
             }
