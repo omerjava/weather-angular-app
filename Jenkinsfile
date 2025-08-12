@@ -42,7 +42,7 @@ pipeline {
         stage('Deploy to Hetzner') {
             steps {
                 sshagent(['hetzner-ssh-key']) {
-                    sh 'ssh -o StrictHostKeyChecking=no root@91.99.230.244 "docker pull omerjava/weather-angular-app && docker-compose -f /path/to/docker-compose.yml up -d"'
+                    sh 'ssh -o StrictHostKeyChecking=no root@91.99.230.244 "docker pull omerjava/weather-angular-app && docker-compose -f /path/to/docker-compose.prod.yml up -d"'
                 }
             }
         }
