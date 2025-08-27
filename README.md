@@ -1,6 +1,12 @@
 # WeatherOfkApp
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.12.
+The aim of this very simple Angular project is to experiment cloud deployment process with Jenkins and Docker. 
+
+Jenkins pipeline, that need to be run at Jenkins server, is supposed to build Angular app image with Dockerfile, store it in Dockerhub, connect then to Hetzner cloud server, pull then Docker app image from Dockerhub and run app at Docker container at cloud server.
+
+All relevant credentials (GitHub, DockerHub, Hetzner) should be stored at Jenkins server which can be run via Docker or via installed Jenkins in desktop.
+
+I have run Jenkins server via Docker and Dockerfile for Jenkins is not included in this project repository.
 
 ## Development server
 
