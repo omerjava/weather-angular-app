@@ -34,7 +34,6 @@ pipeline {
             }
             steps {
                 sh '''
-                rm -rf node_modules package-lock.json
                 npm ci
                 npx cypress run
                 '''
