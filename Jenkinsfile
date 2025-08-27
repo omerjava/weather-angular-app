@@ -21,6 +21,7 @@ pipeline {
                 sh 'npm install -g @angular/cli'
                 sh 'npm install'
                 sh 'ng build --configuration production'
+                sh 'npx cypress install'
                 sh 'npx cypress run'  // Run Cypress tests
             }
         }
