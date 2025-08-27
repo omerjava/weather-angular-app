@@ -29,13 +29,15 @@ pipeline {
             agent {
                 docker {
                     image 'cypress/included:15.0.0'
-                    args '--ipc=host -u root:root'
+                    args '--ipc=host --entrypoint=""'
                 }
             }
             steps {
                 sh '''
-                  npm ci
-                  npx cypress run
+                # clean node_modules and install dependencies inside Cypress container
+                rm -rf node_modules package-lock.json
+                npm ci
+                npx cypress run
                 '''
             }
         }
