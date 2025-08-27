@@ -29,7 +29,7 @@ pipeline {
             agent {
                 docker {
                     image 'cypress/included:15.0.0'
-                    args '--ipc=host'
+                    args '--ipc=host -u root:root'
                 }
             }
             steps {
