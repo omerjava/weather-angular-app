@@ -1,0 +1,24 @@
+.weather-card {
+    max-width: 400px;
+    margin: auto;
+}
+
+.weather-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.icon {
+    font-size: 3rem;
+}
+
+.temp {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.error {
+    color: red;
+    text-align: center;
+}

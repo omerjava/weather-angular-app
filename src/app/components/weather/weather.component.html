@@ -1,0 +1,21 @@
+<mat-card *ngIf="!loading && weather" class="weather-card">
+    <mat-card-header>
+        <mat-card-title>Current Weather</mat-card-title>
+        <mat-card-subtitle>Amsterdam</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="weather-info">
+            <div class="icon">{{ getWeatherIcon(weather.weathercode) }}</div>
+            <div>
+                <div class="temp">{{ weather.temperature }}°C</div>
+                <div>Wind: {{ weather.windspeed }} km/h</div>
+                <div>Direction: {{ weather.winddirection }}°</div>
+                <div>Updated: {{ weather.time | date:'short' }}</div>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>
+
+<mat-progress-spinner *ngIf="loading" mode="indeterminate"></mat-progress-spinner>
+
+<div *ngIf="error" class="error">{{ error }}</div>
