@@ -10,7 +10,7 @@ pipeline {
             }
         }
 
-        stage('Build Angular App and Run Tests') {
+        stage('Build Angular App') {
             agent {
                 docker {
                     image 'node:24.0.2'
@@ -18,11 +18,25 @@ pipeline {
                 }
             }
             steps {
-                sh 'npm install -g @angular/cli'
-                sh 'npm install'
-                sh 'ng build --configuration production'
-                sh 'npx cypress install'
-                sh 'npx cypress run'  // Run Cypress tests
+                sh '''
+                  npm ci
+                  npx ng build --configuration production
+                '''
+            }
+        }
+
+        stage('Run Cypress Tests') {
+            agent {
+                docker {
+                    image 'cypress/included:15.0.0'
+                    args '--ipc=host'
+                }
+            }
+            steps {
+                sh '''
+                  npm ci
+                  npx cypress run
+                '''
             }
         }
 
